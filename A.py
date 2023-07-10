@@ -1,43 +1,55 @@
-import sys
+from sys import stdin, stdout
 
-band = 0
-cont = 0
-control = 0
+
+def preOrder(listChar: list[str]):
+    listSimbols = ["-", "^", "+", "*", "/"]
+    newList = [k for k in listChar]
+    for k in range(len(newList)):
+        if newList[k] in listSimbols:
+            newList.insert(0, newList.pop(k))
+
+    return newList
+
+
 operations = []
 signos = ["+", "-", "^", "*", " /"]
 
-for i in sys.stdin:
-    if band == 0:
-        control = int(i)
+for k, input in enumerate(stdin):
+    if k == 0:
+        control = int(input)
         band = 1
     else:
-        operations.append(i.rstrip("\n"))
-        cont+=1
-        if cont == control:
+        operations.append(input.rstrip("\n"))
+        if k == control:
             break
 
-subOperacion = ""
-for operaciones in operations:
-    operaciones = list(operaciones)
-    listIndex = []
-    openParentesis = False
+signos = ["-", "+", "/", "*", "^"]
 
-    for k, char in enumerate(operaciones):
+# Recorremos la lista de operaciones ingresasdas
+for indice, operaciones in enumerate(operations):
+    # Inicializamos variables
+    foundBrackets = False
+    listChar = list(operaciones)
+    subOperacion = []
+    indexInicial = 0
+    # Recorremos los caracteres
+    for k, char in enumerate(listChar):
+        # Evaluamos si es una apertura de parentesis
         if char == "(":
-            openParentesis = True
-            listIndex.append(k)
-        elif openParentesis:
-            if char == ")":
-                listIndex.append(k)
-                openParentesis = False
-                subOperacion = list(subOperacion)
-                cont = 0
-                for j,char in enumerate(subOperacion):
-                    if char in signos:
-                        subOperacion.insert(0,subOperacion.pop(j))
-                        cont += 1
-                    print(subOperacion)
-                subOperacion = ""
-                listIndex =[]
-            else:
-                subOperacion += char
+            foundBrackets = True
+            indexInicial = k+1
+        elif char == ")":
+            foundBrackets = False
+            # Cuando encontramos el parentesis de cierre aplicamos el algoritmo de preorden y postorder
+            operationPreOrder = preOrder(subOperacion)
+            for j, caracter in enumerate(operationPreOrder):
+                listChar[indexInicial+j] = caracter
+            subOperacion = []
+        elif foundBrackets:
+            subOperacion.append(char)
+        elif not foundBrackets and char in signos:
+            listChar.insert(0, listChar.pop(k))
+
+    print(f"{indice+1} Original: {''.join(a for a in operaciones)}")
+    print(
+        f"Preorder: {''.join(text for text in listChar if text not in ['(', ')'])}")
