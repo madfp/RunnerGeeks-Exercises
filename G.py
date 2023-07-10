@@ -1,6 +1,6 @@
 from sys import stdin, stdout
 
-# Entrada de datos
+# Entrada de datos por entrada estandar
 for k, inputs in enumerate(stdin):
     if k == 0:
         cantidad = int(inputs.rstrip("\n"))
@@ -12,15 +12,15 @@ for k, inputs in enumerate(stdin):
 
 # Ordenamos la lista de forma ascendente
 listNums.sort()
-count = 0
-# l es el primer valor de la lista y r el ultimo
-l, r = 0, len(listNums)-1
+# l vale 0 y r vale la longitud de la lista -1
+l, r = 0, cantidad-1
 # Calculamos m1 y m2
 m1 = int(l + (r-l)/3)
 m2 = int(r - (r-l)/3)
-
+# Definimos index como -1 por si no se encuentra sea el valor que devuelva por defecto
 index = -1
 
+# Ciclo de busqueda
 while l <= r:
     # Definimos las condiciones para retornar el indice encontrado
     if listNums[m1] == numFind:
@@ -43,4 +43,5 @@ while l <= r:
     m1 = int(l + (r-l)/3)
     m2 = int(r - (r-l)/3)
 
+# Salida estandar
 stdout(str(index))
