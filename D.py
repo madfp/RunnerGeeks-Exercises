@@ -32,23 +32,26 @@ def recorrido(chess_board: list[list[int]], casilla_actual: list[int], contador:
 
     # Ciclo que recorre los movimientos posibles
     for movimiento in movimientos:
+        mov_x = casilla_actual[0]+movimiento[0]
+        mov_y = casilla_actual[1]+movimiento[1]
         try:
-            if chess_board[casilla_actual[0]+movimiento[0]][casilla_actual[1]+movimiento[1]] == 0 and casilla_actual[0]+movimiento[0] >= 0 and casilla_actual[1]+movimiento[1] >= 0:
-
+            if chess_board[mov_x][mov_y] == 0 and mov_x >= 0 and mov_y >= 0:
                 # Si la suma de los indices son positivas y la casilla esta libre actualizamos
-                chess_board[casilla_actual[0]+movimiento[0]
-                            ][casilla_actual[1]+movimiento[1]] = contador
+                chess_board[mov_x][mov_y] = contador
                 # Nos intentamos mover con una nueva llamada a la funcion con el tablero actualizado
-                recorrido(chess_board, [
-                          casilla_actual[0]+movimiento[0], casilla_actual[1]+movimiento[1]], contador+1)
+                recorrido(chess_board, [mov_x, mov_y], contador+1)
                 # Si termina el nuevo recorrido sin ningun cambio fue porque no habian nuevos movimientos
                 # Cambiamos el valor a 0 para seguir buscando posibilidades
-                chess_board[casilla_actual[0]+movimiento[0]
-                            ][casilla_actual[1]+movimiento[1]] = 0
-            elif validar_espacios(chess_board):
-                return chess_board
+                chess_board[mov_x][mov_y] = 0
         except:
             pass
+    # Si termina el ciclo que es que ha probado todos los movimientos posibles para la casilla actual
+    # Como ya los probo todos verificamos si quedan espacios en blanco, en caso de que no queden retornamos el tablero
+    # Si quedan movimientos sale de la funcion y va al movimiento anterior
+    if validar_espacios(chess_board):
+        return chess_board
+    if contador >= 62:
+        print(contador)
 
 
 print(recorrido(board, indice, 2))
