@@ -1,25 +1,18 @@
-import sys
-import itertools
-
-band = 0
-control = 1
-permutation = []
-n = 0
+#Importamos los módulos y librerías necesarios
+from sys import stdin, stdout; from itertools import permutations
 
 # Entrada estandar
-for i in sys.stdin:
-    if band == 0:
-        band = 1
-        n = int(i)
-    elif band == 1:
-        permutation = i.replace(" ", "").rstrip("\n")
-        break
-resultado = list(itertools.permutations(permutation, n))
-res = ""
+for i, input in enumerate(stdin):
+    if i == 0:
+        n = int(input)
+    else:
+        permutacion = input.replace(" ", "").rstrip("\n")
+        break;
+
+#Calculamos las permutaciones de la secuencia de números
+resultado = list(permutations(permutacion, n))
+
+#Imprimimos las permutaciones en orden
 for i in resultado:
-    for j in i:
-        res += j + " "
-    res.rstrip(" ")
-    sys.stdout.write(str(res))
-    print("\n")
-    res = ""
+    res = " ".join([numero for numero in i]).rstrip(" ")
+    stdout.write(str(res) + "\n")    
