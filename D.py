@@ -24,34 +24,64 @@ def validar_espacios(matriz):
     return True
 
 
-# Funcion que hace el recorrido recursivo por backtraking
-def recorrido(chess_board: list[list[int]], casilla_actual: list[int], contador: int):
+# Funcion que calcula el peso de los movimientos posiles del caballo y los devuelve el orden en que se deben hacer
+def calcular_pesos(chess_board: list[list[int]], casilla_actual: list[int]):
     # Creamos una matriz con todos los movimientos posibles del caballero
     movimientos = [[1, 2], [-1, 2], [-1, -2],
                    [1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]]
+    pesos = []
+    movimientos_finales = []
 
+    for movimiento in movimientos:
+        cont = 1
+        mov_x = casilla_actual[0]+movimiento[0]
+        mov_y = casilla_actual[1]+movimiento[1]
+        # Si el movimiento sale del tablero su peso es 0
+        # En caso contrario se procede a calcular su peso
+        if mov_x not in range(0, 8) or mov_y not in range(0, 8):
+            pesos.append(0)
+        else:
+            actual = [mov_x, mov_y]
+            # Los movimientos pasan a ser los valores actuales para la evaluacion
+            # Creamos la nueva iteracion para calcular los pesos
+            for nuevo_movimiento in movimientos:
+                new_mov_x = actual[0] + nuevo_movimiento[0]
+                new_mov_y = actual[1] + nuevo_movimiento[1]
+                if new_mov_x in range(0, 8) and new_mov_y in range(0, 8) and chess_board[new_mov_x][new_mov_y] == 0:
+                    cont += 1
+            pesos.append(cont)
+
+    for k in range(1, 8):
+        for j in range(len(pesos)):
+            if pesos[j] == k:
+                movimientos_finales.append(movimientos[j])
+    return movimientos_finales
+
+
+# Funcion que hace el recorrido recursivo por backtraking
+def recorrido(chess_board: list[list[int]], casilla_actual: list[int], contador: int):
+    # Obtenemos ls mejores movimientos posibles para el caballo en orden
+    movimientos = calcular_pesos(chess_board, casilla_actual)
+    print(contador)
     # Ciclo que recorre los movimientos posibles
     for movimiento in movimientos:
         mov_x = casilla_actual[0]+movimiento[0]
         mov_y = casilla_actual[1]+movimiento[1]
-        try:
-            if chess_board[mov_x][mov_y] == 0 and mov_x >= 0 and mov_y >= 0:
-                # Si la suma de los indices son positivas y la casilla esta libre actualizamos
-                chess_board[mov_x][mov_y] = contador
-                # Nos intentamos mover con una nueva llamada a la funcion con el tablero actualizado
-                recorrido(chess_board, [mov_x, mov_y], contador+1)
-                # Si termina el nuevo recorrido sin ningun cambio fue porque no habian nuevos movimientos
-                # Cambiamos el valor a 0 para seguir buscando posibilidades
-                chess_board[mov_x][mov_y] = 0
-        except:
-            pass
+
+        if chess_board[mov_x][mov_y] == 0 and mov_x >= 0 and mov_y >= 0:
+            # Si la suma de los indices son positivas y la casilla esta libre actualizamos
+            chess_board[mov_x][mov_y] = contador
+            # Nos intentamos mover con una nueva llamada a la funcion con el tablero actualizado
+            recorrido(chess_board, [mov_x, mov_y], contador+1)
+            # Si termina el nuevo recorrido sin ningun cambio fue porque no habian nuevos movimientos
+            # Cambiamos el valor a 0 para seguir buscando posibilidades
+            chess_board[mov_x][mov_y] = 0
+
     # Si termina el ciclo que es que ha probado todos los movimientos posibles para la casilla actual
     # Como ya los probo todos verificamos si quedan espacios en blanco, en caso de que no queden retornamos el tablero
     # Si quedan movimientos sale de la funcion y va al movimiento anterior
     if validar_espacios(chess_board):
         return chess_board
-    if contador >= 62:
-        print(contador)
 
 
 print(recorrido(board, indice, 2))
