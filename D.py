@@ -5,8 +5,7 @@ from sys import stdin, stdout
 # Funcion que calcula el peso de los movimientos posiles del caballo y los devuelve el orden en que se deben hacer
 def calcular_pesos(chess_board: list[list[int]], casilla_actual: list[int]):
     # Creamos una matriz con todos los movimientos posibles del caballero
-    movimientos = [[1, 2], [-1, 2], [-1, -2],
-                   [1, -2], [2, 1], [2, -1], [-2, 1], [-2, -1]]
+    movimientos = [[2, 1], [2, -1],[1, 2],[1, -2],[-1, 2],[-1, -2],[-2, 1], [-2, -1] ]
     pesos = []
     movimientos_finales = []
 
@@ -73,7 +72,7 @@ board[indice[0]][indice[1]] = 1
 # CALCULAMOS LOS RESULTADOS
 resultado = recorrido(board, indice, 2)
 if resultado is None:
-    print("The Knight is trapepd")
+    print("The Knight is trapped")
 else:
     texto = ""
     for k in range(1, 65):
