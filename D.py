@@ -75,5 +75,11 @@ resultado = recorrido(board, indice, 2)
 if resultado is None:
     print("The Knight is trapepd")
 else:
-    for filas in resultado:
-        print(*filas)
+    texto = ""
+    for k in range(1, 65):
+        for num_columna, filas in enumerate(resultado):
+            if k in filas:
+                texto += f"{letters[filas.index(k)]}{8-num_columna} "
+                if k % 8 == 0:
+                    print(texto[0:len(texto)-1])
+                    texto = ""
