@@ -1,6 +1,2 @@
 # RunnerGeeks-Exercises
-
-## Contribuidores
-### -Marco de Freitas
-### -Sebastián Medina
-### -Giancarlos Hernáiz
+Ejercicios del primer maratón de programación Runner Geeks 2023.
